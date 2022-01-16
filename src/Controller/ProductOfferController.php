@@ -9,28 +9,39 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Persistence\ManagerRegistry;
 
 class ProductOfferController extends AbstractController
 {
-    #[Route('/my-product-offer', name: 'my_product_offer')]
+    public function __construct(private ManagerRegistry $doctrine) {}
+
+    #[Route('/my-product-offer', name: 'my_product_offer', methods: ["GET"] )]
     public function myProductOffer(): Response
     {
-        return $this->render('product-offer/my.html.twig');
+        $entityManager = $this->doctrine;
+        $productOffers = $entityManager
+            ->getRepository(ProductOffer::class)
+            ->getPublicProductOffers();
+
+        return $this->render('product-offer/my.html.twig', [
+            'productOffers' => $productOffers,
+        ]);
     }
 
-    #[Route('/add-product-offer', name: 'add_product_offer')]
+    #[Route('/add-product-offer', name: 'add_product_offer', methods: ["GET|POST"])]
     public function addProductOffer(Request $request, EntityManagerInterface $entityManager): Response
     {
         $productOffer = new ProductOffer();
+        $productOfferRepository = $this->doctrine->getRepository(ProductOffer::class);
 
         $form = $this->createForm(ProductOfferType::class, $productOffer);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-
+        if ($request->isMethod('POST') && $form->isSubmitted() && $form->isValid()) {
             try {
-                $entityManager->persist($productOffer);
-                $entityManager->flush();
+
+                $productOfferRepository->createProductOffer($productOffer);
+
                 $this->addFlash('success', 'Product offer add success');
                 return $this->redirectToRoute('my_product_offer');
 
@@ -38,6 +49,7 @@ class ProductOfferController extends AbstractController
                 $this->addFlash('error', 'Product offer add error');
             }
         }
+
         return $this->render('product-offer/add.html.twig', [
             'productOfferForm' => $form->createView()
         ]);

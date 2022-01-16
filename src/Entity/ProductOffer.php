@@ -2,11 +2,14 @@
 declare(strict_types=1);
 namespace App\Entity;
 
+use App\Enum\CompanyOrIndividualEnum;
+use App\Enum\StateProductEnum;
+use App\Enum\StatusProductOfferEnum;
 use App\Utils\IdGenerator;
 use DateTime;
 use App\Repository\ProductOfferRepository;
-use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
 
 #[ORM\Entity(repositoryClass: ProductOfferRepository::class)]
 class ProductOffer
@@ -15,54 +18,54 @@ class ProductOffer
     #[ORM\Column(type: 'string', length: 8)]
     private string $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 120)]
     private string $title;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $description;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private ?string $images;
-
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private float $price;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $stateOfProduct;
-
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $giveForFree;
-
-    #[ORM\Column(type: 'datetime')]
-    private DateTimeInterface $createdAt;
-
-    #[ORM\Column(type: 'datetime')]
-    private ?DateTimeInterface $updateAt;
-
-    #[ORM\Column(type: 'datetime')]
-    private ?DateTimeInterface $expiresAt;
+    #[Column(type: 'string', length: 20, enumType: StateProductEnum::class)]
+    public StateProductEnum $stateOfProduct;
 
     #[ORM\Column(type: 'boolean')]
-    private bool $enabled;
+    private bool $giveForFree = false;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $productOwner;
+    #[ORM\Column(type: 'datetime')]
+    private DateTime $createdAt;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private string $status;
+    #[ORM\Column(type: 'datetime')]
+    private null|DateTime $updateAt;
+
+    #[ORM\Column(type: 'datetime')]
+    private null|DateTime $expiresAt;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $enabled = false;
+
+    #[Column(type: 'string', length: 20, enumType: StatusProductOfferEnum::class)]
+    private StatusProductOfferEnum $status;
+
+    #[Column(type: 'string', length: 20, enumType: CompanyOrIndividualEnum::class)]
+    private CompanyOrIndividualEnum $companyOrIndividual;
 
     public function __construct()
     {
         $this->id = IdGenerator::IdGenerator();
-        $this->setCreatedAt(new \DateTime());
+        $this->createdAt = new DateTime();
+        $this->updateAt = new DateTime();
+        $this->expiresAt = new DateTime();
+
     }
 
-    public function getId(): ?string
+    public function getId(): string
     {
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -73,7 +76,7 @@ class ProductOffer
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -84,18 +87,7 @@ class ProductOffer
         return $this;
     }
 
-    public function getImages(): ?string
-    {
-        return $this->images;
-    }
-
-    public function setImages(string $images): ProductOffer
-    {
-        $this->images = $images;
-        return $this;
-    }
-
-    public function getPrice(): ?float
+    public function getPrice(): float
     {
         return $this->price;
     }
@@ -106,63 +98,65 @@ class ProductOffer
         return $this;
     }
 
-    public function getStateOfProduct(): ?string
+    public function getStateOfProduct(): StateProductEnum
     {
         return $this->stateOfProduct;
     }
 
-    public function setStateOfProduct(string $stateOfProduct): ProductOffer
+    public function setStateOfProduct(StateProductEnum $stateOfProduct): ProductOffer
     {
         $this->stateOfProduct = $stateOfProduct;
-
         return $this;
     }
 
-    public function getGiveForFree(): ?string
+    /**
+     * @return bool
+     */
+    public function isGiveForFree(): bool
     {
         return $this->giveForFree;
     }
 
-    public function setGiveForFree(string $giveForFree): ProductOffer
+    public function setGiveForFree(bool $giveForFree): ProductOffer
     {
         $this->giveForFree = $giveForFree;
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): ProductOffer
+    public function setCreatedAt(DateTime $createdAt): ProductOffer
     {
         $this->createdAt = $createdAt;
         return $this;
     }
 
-    public function getUpdateAt(): ?\DateTimeImmutable
+    public function getUpdateAt(): null|DateTime
     {
         return $this->updateAt;
     }
 
-    public function setUpdateAt(\DateTimeImmutable $updateAt): ProductOffer
+    public function setUpdateAt(DateTime $updateAt): ProductOffer
     {
         $this->updateAt = $updateAt;
         return $this;
     }
 
-    public function getExpiresAt(): ?\DateTimeImmutable
+    public function getExpiresAt(): null|DateTime
     {
         return $this->expiresAt;
     }
 
-    public function setExpiresAt(\DateTimeImmutable $expiresAt): ProductOffer
+    public function setExpiresAt(DateTime $expiresAt): ProductOffer
     {
         $this->expiresAt = $expiresAt;
         return $this;
     }
 
-    public function getEnabled(): ?bool
+    public function isEnabled(): bool
     {
         return $this->enabled;
     }
@@ -173,27 +167,25 @@ class ProductOffer
         return $this;
     }
 
-    public function getProductOwner(): ?string
-    {
-        return $this->productOwner;
-    }
-
-    public function setProductOwner(string $productOwner): ProductOffer
-    {
-        $this->productOwner = $productOwner;
-
-        return $this;
-    }
-
-    public function getStatus(): ?string
+    public function getStatus(): StatusProductOfferEnum
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): ProductOffer
+    public function setStatus(StatusProductOfferEnum $status): ProductOffer
     {
         $this->status = $status;
+        return $this;
+    }
 
+    public function getCompanyOrIndividual(): CompanyOrIndividualEnum
+    {
+        return $this->companyOrIndividual;
+    }
+
+    public function setCompanyOrIndividual(CompanyOrIndividualEnum $companyOrIndividual): ProductOffer
+    {
+        $this->companyOrIndividual = $companyOrIndividual;
         return $this;
     }
 }

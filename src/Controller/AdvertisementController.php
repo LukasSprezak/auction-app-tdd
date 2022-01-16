@@ -11,8 +11,6 @@ class AdvertisementController extends AbstractController
     #[Route('/', name: 'advertisement_index')]
     public function index(): Response
     {
-        return $this->render('advertisement/index.html.twig', [
-            'controller_name' => 'AdvertisementController',
-        ]);
+        return $this->render('home/index.html.twig');
     }
 }

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace App\Enum;
 
-enum StateProductEnum: int
+enum StateProductEnum: string
 {
-    case NEW = 0;
-    case USED = 1;
+    case NEW = 'new';
+    case USED = 'used';
 }

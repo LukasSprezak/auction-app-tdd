@@ -2,11 +2,13 @@
 declare(strict_types=1);
 namespace App\Enum;
 
-enum StatusProductOfferEnum: int
+enum StatusProductOfferEnum: string
 {
-    case DRAFT = 0;
-    case PUBLISHED = 1;
-    case PENDING = 2;
-    case ACTIVE = 3;
-    case FINISHED = 4;
+    case DRAFT = 'draft';
+    case PUBLISHED = 'published';
+    case PENDING = 'pending';
+    case ACTIVE = 'active';
+    case FINISHED = 'finished';
+    case ARCHIVED = 'archived';
+    case DELETED = 'deleted';
 }
