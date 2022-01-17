@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\ProductOffer;
 use App\Enum\CompanyOrIndividualEnum;
+use App\Enum\ProductBillingEnum;
 use App\Enum\StateProductEnum;
 use App\Enum\StatusProductOfferEnum;
 use Symfony\Component\Form\AbstractType;
@@ -23,7 +24,7 @@ final class ProductOfferType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                'label' => 'title',
+                'label' => 'Title',
                 'required' => true,
                 'constraints' => [
                     new NotBlank(['message' => 'Please enter a title.']),
@@ -37,10 +38,10 @@ final class ProductOfferType extends AbstractType
                 'label' => 'Description',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank(['message' => 'Please enter a title.']),
+                    new NotBlank(['message' => 'Please enter a description.']),
                     new Length([
                         'max' => 255,
-                        'maxMessage' => 'The title can be up to 120 characters long.'
+                        'maxMessage' => 'The description can be up to 255 characters long.'
                     ])
                 ]
             ])
@@ -68,7 +69,15 @@ final class ProductOfferType extends AbstractType
                     new NotBlank(['message' => 'Please select the radio button.']),
                 ]
             ])
-            ->add('giveForFree', CheckboxType::class, [
+            ->add('productBilling', EnumType::class, [
+                'required' => true,
+                'class' => ProductBillingEnum::class,
+                'expanded' => true,
+                'constraints' => [
+                    new NotBlank(['message' => 'Please select the radio button.']),
+                ]
+            ])
+            ->add('negotiablePrice', CheckboxType::class, [
                 'label_attr' => [
                     'class' => 'switch-custom'
                 ]

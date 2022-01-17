@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Enum\CompanyOrIndividualEnum;
+use App\Enum\ProductBillingEnum;
 use App\Enum\StateProductEnum;
 use App\Enum\StatusProductOfferEnum;
 use App\Utils\IdGenerator;
@@ -50,6 +51,12 @@ class ProductOffer
 
     #[Column(type: 'string', length: 20, enumType: CompanyOrIndividualEnum::class)]
     private CompanyOrIndividualEnum $companyOrIndividual;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $negotiablePrice;
+
+    #[Column(type: 'string', length: 20, enumType: ProductBillingEnum::class)]
+    private ProductBillingEnum $productBilling;
 
     public function __construct()
     {
@@ -106,20 +113,6 @@ class ProductOffer
     public function setStateOfProduct(StateProductEnum $stateOfProduct): ProductOffer
     {
         $this->stateOfProduct = $stateOfProduct;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isGiveForFree(): bool
-    {
-        return $this->giveForFree;
-    }
-
-    public function setGiveForFree(bool $giveForFree): ProductOffer
-    {
-        $this->giveForFree = $giveForFree;
         return $this;
     }
 
@@ -186,6 +179,28 @@ class ProductOffer
     public function setCompanyOrIndividual(CompanyOrIndividualEnum $companyOrIndividual): ProductOffer
     {
         $this->companyOrIndividual = $companyOrIndividual;
+        return $this;
+    }
+
+    public function isNegotiablePrice(): bool
+    {
+        return $this->negotiablePrice;
+    }
+
+    public function setNegotiablePrice(bool $negotiablePrice): ProductOffer
+    {
+        $this->negotiablePrice = $negotiablePrice;
+        return $this;
+    }
+
+    public function getProductBilling(): ProductBillingEnum
+    {
+        return $this->productBilling;
+    }
+
+    public function setProductBilling(ProductBillingEnum $productBilling): ProductOffer
+    {
+        $this->productBilling = $productBilling;
         return $this;
     }
 }

@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\ProductOffer;
 use App\Form\ProductOfferType;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +28,7 @@ class ProductOfferController extends AbstractController
     }
 
     #[Route('/add-product-offer', name: 'add_product_offer', methods: ["GET|POST"])]
-    public function addProductOffer(Request $request, EntityManagerInterface $entityManager): Response
+    public function addProductOffer(Request $request): Response
     {
         $productOffer = new ProductOffer();
         $productOfferRepository = $this->doctrine->getRepository(ProductOffer::class);

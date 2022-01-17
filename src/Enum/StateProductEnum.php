@@ -6,4 +6,5 @@ enum StateProductEnum: string
 {
     case NEW = 'new';
     case USED = 'used';
+    case DAMAGED = 'damaged';
 }
