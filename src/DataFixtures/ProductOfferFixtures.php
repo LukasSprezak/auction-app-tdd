@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\ProductOffer;
 use App\Enum\CompanyOrIndividualEnum;
+use App\Enum\ProductBillingEnum;
 use App\Enum\StateProductEnum;
 use App\Enum\StatusProductOfferEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -26,10 +27,11 @@ class ProductOfferFixtures extends Fixture
            $productOffer->setDescription('Text description');
            $productOffer->setPrice(random_int(10, 100));
            $productOffer->setStateOfProduct(StateProductEnum::NEW);
-           $productOffer->setGiveForFree(true);
            $productOffer->setEnabled(true);
            $productOffer->setStatus(StatusProductOfferEnum::PUBLISHED);
            $productOffer->setCompanyOrIndividual(CompanyOrIndividualEnum::COMPANY);
+           $productOffer->setProductBilling(ProductBillingEnum::PRICE);
+           $productOffer->setNegotiablePrice(true);
            $productOffer->setCreatedAt($now);
            $productOffer->setUpdateAt($now);
            $productOffer->setExpiresAt($now);

@@ -17,7 +17,7 @@
                                 <p class="card-text">Price: {{ productOffer.price }}</p>
                             </div>
                             <div class="card-footer">
-                                <a class="btn btn-outline-primary float-left" href="" role="button">visit</a>
+                                <a class="btn btn-outline-primary float-left" href="{{ path('view_product_offer', { id: productOffer.id}) }}" role="button">visit</a>
                                 <small class="text-muted pl-5 mt-5">created at {{ productOffer.createdAt |format_datetime('medium', 'short') }} </small>
                             </div>
                         </div>
@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="p-3 mb-2 bg-light text-black text-center">
-            <h1>You don't have any advertisement.</h1>
+            <h1>You don't have any products offers.</h1>
         </div>
         {% endfor %}
     </div>

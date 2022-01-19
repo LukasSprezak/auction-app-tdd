@@ -31,9 +31,6 @@ class ProductOffer
     #[Column(type: 'string', length: 20, enumType: StateProductEnum::class)]
     public StateProductEnum $stateOfProduct;
 
-    #[ORM\Column(type: 'boolean')]
-    private bool $giveForFree = false;
-
     #[ORM\Column(type: 'datetime')]
     private DateTime $createdAt;
 

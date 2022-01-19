@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Finished product offer{% endblock %}
+
+{% block content %}
+    {% for productOffers in productOffer %}
+        Title: {{ productOffer.title }}
+        <p>Description: {{ productOffer.description }}</p>
+        <p>Price: {{ productOffer.price }}</p>
+    {% endfor %}
+{% endblock %}

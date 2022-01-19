@@ -6,7 +6,6 @@ use App\Entity\ProductOffer;
 use App\Enum\CompanyOrIndividualEnum;
 use App\Enum\ProductBillingEnum;
 use App\Enum\StateProductEnum;
-use App\Enum\StatusProductOfferEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -53,14 +52,6 @@ final class ProductOfferType extends AbstractType
                     new GreaterThan(0)
                 ]
             ])
-            ->add('companyOrIndividual', EnumType::class, [
-                'required' => true,
-                'class' => CompanyOrIndividualEnum::class,
-                'expanded' => true,
-                'constraints' => [
-                    new NotBlank(['message' => 'Please select the radio button.']),
-                ]
-            ])
             ->add('stateOfProduct', EnumType::class, [
                 'required' => true,
                 'class' => StateProductEnum::class,
@@ -69,9 +60,14 @@ final class ProductOfferType extends AbstractType
                     new NotBlank(['message' => 'Please select the radio button.']),
                 ]
             ])
-            ->add('productBilling', EnumType::class, [
+            ->add('enabled', CheckboxType::class, [
+                'label_attr' => [
+                    'class' => 'switch-custom'
+                ]
+            ])
+            ->add('companyOrIndividual', EnumType::class, [
                 'required' => true,
-                'class' => ProductBillingEnum::class,
+                'class' => CompanyOrIndividualEnum::class,
                 'expanded' => true,
                 'constraints' => [
                     new NotBlank(['message' => 'Please select the radio button.']),
@@ -82,9 +78,12 @@ final class ProductOfferType extends AbstractType
                     'class' => 'switch-custom'
                 ]
             ])
-            ->add('enabled', CheckboxType::class, [
-                'label_attr' => [
-                    'class' => 'switch-custom'
+            ->add('productBilling', EnumType::class, [
+                'required' => true,
+                'class' => ProductBillingEnum::class,
+                'expanded' => true,
+                'constraints' => [
+                    new NotBlank(['message' => 'Please select the radio button.']),
                 ]
             ])
         ;

@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit product{% endblock %}
+
+{% block content %}
+    <div class="container mt-5 mb-5">
+        <h1 class="h3 mb-3 mt-5 font-weight-normal text-center">Edit product offer</h1>
+        {% form_theme productOfferForm 'bootstrap_4_layout.html.twig' %}
+        {{ form_start(productOfferForm, enctype='multipart/form-data', {"attr": {"novalidate": "novalidate"}} ) }}
+
+        {{ form_row(productOfferForm.title) }}
+        {{ form_row(productOfferForm.description) }}
+        {{ form_row(productOfferForm.price) }}
+        {{ form_row(productOfferForm.companyOrIndividual) }}
+        {{ form_row(productOfferForm.stateOfProduct) }}
+        {{ form_row(productOfferForm.productBilling) }}
+        {{ form_row(productOfferForm.negotiablePrice) }}
+        {{ form_row(productOfferForm.enabled) }}
+
+        <button type="submit" class="btn btn-primary">
+            <i class="fa fa-save" aria-hidden="true"></i> Edit product
+        </button>
+        {{ form_end(productOfferForm) }}
+    </div>
+{% endblock %}

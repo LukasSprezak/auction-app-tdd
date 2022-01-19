@@ -2,34 +2,53 @@
 declare(strict_types=1);
 namespace App\Tests\Form;
 
-use App\Entity\ProductOffer;
 use App\Form\ProductOfferType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ProductOfferTypeTest extends TypeTestCase
 {
-    public function testSubmitValidData(): void
+    private ProductOfferType $type;
+
+    protected function setUp(): void
     {
-        $formData = [
-            'title' => 'test',
-            'description' => 'test2',
-            'images' => 'test2',
-            'price' => 11.11,
-            'stateOfProduct' => 'aaa',
-            'giveForFree' => false,
-            'createdAt' => 'asda',
-            'updateAt' => 'asa',
-            'expiresAt' => 'asada',
-            'enabled' => false,
-            'productOwner' => 'Mike Smith'
+        $this->type = new ProductOfferType();
+    }
+
+    public function testBuildForm(): void
+    {
+        $fields = [
+            ['title', TextType::class],
+            ['description', TextType::class],
+            ['price', NumberType::class],
+            ['stateOfProduct', EnumType::class],
+            ['enabled', CheckboxType::class],
+            ['companyOrIndividual', EnumType::class],
+            ['negotiablePrice', CheckboxType::class],
+            ['productBilling', EnumType::class]
         ];
 
-        $model = new ProductOffer();
-        $form = $this->factory->create(ProductOfferType::class, $model);
+        $builder = $this->createMock(FormBuilder::class);
+        $builder->expects($this->exactly(count($fields)))
+            ->method('add')
+            ->withConsecutive(...$fields)
+            ->willReturnSelf();
 
-        $expected = new ProductOffer();
-        $form->submit($formData);
+        $this->type->buildForm($builder, []);
+    }
 
-        $this->assertTrue($form->isSynchronized());
+    public function testConfigureOptions(): void
+    {
+        $resolver = $this->createMock(OptionsResolver::class);
+
+        $resolver->expects($this->once())
+            ->method('setDefaults')
+            ->with($this->isType('array'));
+        $this->type->configureOptions($resolver);
     }
 }

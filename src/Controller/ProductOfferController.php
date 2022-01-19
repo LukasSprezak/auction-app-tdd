@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\ProductOffer;
+use App\Enum\StatusProductOfferEnum;
 use App\Form\ProductOfferType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +28,7 @@ class ProductOfferController extends AbstractController
         ]);
     }
 
-    #[Route('/add-product-offer', name: 'add_product_offer', methods: ["GET|POST"])]
+    #[Route('/add-product-offer', name: 'add_product_offer', methods: ["GET|POST"] )]
     public function addProductOffer(Request $request): Response
     {
         $productOffer = new ProductOffer();
@@ -38,7 +39,6 @@ class ProductOfferController extends AbstractController
 
         if ($request->isMethod('POST') && $form->isSubmitted() && $form->isValid()) {
             try {
-
                 $productOfferRepository->createProductOffer($productOffer);
 
                 $this->addFlash('success', 'Product offer add success');
@@ -51,6 +51,47 @@ class ProductOfferController extends AbstractController
 
         return $this->render('product-offer/add.html.twig', [
             'productOfferForm' => $form->createView()
+        ]);
+    }
+
+    #[Route('/my-product-offer/{id}', name: 'view_product_offer')]
+    public function viewProductOffer(ProductOffer $productOffer): Response
+    {
+        if ($productOffer->getStatus() === StatusProductOfferEnum::FINISHED) {
+            return $this->render("product-offer/finished.html.twig", [
+                "productOffer" => $productOffer
+            ]);
+        }
+
+        return $this->render('product-offer/view.html.twig', [
+            'productOffer' => $productOffer
+        ]);
+    }
+
+    #[Route('/my-product-offer/edit/{id}', name: 'edit_product_offer', methods: ['GET|POST'])]
+    public function editProductOffer(Request $request, ProductOffer $productOffer): Response
+    {
+        $productOfferRepository = $this->doctrine->getRepository(ProductOffer::class);
+        $form = $this->createForm(ProductOfferType::class, $productOffer);
+
+        if ($request->isMethod("POST")) {
+            $form->handleRequest($request);
+
+            try {
+                $productOfferRepository->createProductOffer($productOffer);
+
+                $this->addFlash("success", "Offer {$productOffer->getTitle()} has been updated");
+                return $this->redirectToRoute("view_product_offer", [
+                    "id" => $productOffer->getId()
+                ]);
+
+            } catch (\Exception $exception) {
+                $this->addFlash('error', 'Product offer updated error');
+            }
+        }
+
+        return $this->render("product-offer/edit.html.twig", [
+            "productOfferForm" => $form->createView()
         ]);
     }
 }
