@@ -14,35 +14,13 @@
         {% include('partial/flash-message.html.twig') %}
     </div>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a class="navbar-brand" href="#">Brand</a>
-            <ul class="nav nav-pills mr-auto mt-2 mt-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link {% if app.request.get('_route') == 'advertisement_index' %}active{% endif %}" href="{{ path('advertisement_index') }}">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if app.request.get('_route') == 'my_product_offer' %}active{% endif %}" href="{{ path('my_product_offer') }}">My offers</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if app.request.get('_route') == 'add_product_offer' %}active{% endif %}" href="{{ path('add_product_offer') }}">Add product</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="">Register</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="">Log in</a>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-        </div>
-    </nav>
+    <div class="container">
+        {% if is_granted("ROLE_USER") %}
+            {% include("partial/menu/menu-logged.html.twig") %}
+        {% else %}
+            {% include("partial/menu/menu-not-logged-in.html.twig") %}
+        {% endif %}
+    </div>
 
 </div>
 <body>
