@@ -2,8 +2,9 @@
 declare(strict_types=1);
 namespace App\Controller;
 
+use App\Entity\CustomerInformation;
 use App\Entity\User;
-use App\Form\RegistrationFormType;
+use App\Form\UserCustomerInformationType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,19 +21,31 @@ class RegistrationController extends AbstractController
         EntityManagerInterface $entityManager): Response
     {
         $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $customerInformation = new CustomerInformation();
+
+        $mergeDataType = [
+            'customerInformation' => $customerInformation,
+            'user' => $user,
+        ];
+
+        $form = $this->createForm(UserCustomerInformationType::class, $mergeDataType);
 
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+
             $user->setPassword(
             $userPasswordHasher->hashPassword(
                     $user,
-                    $form->get('plainPassword')->getData()
+                    $form->get('user')['plainPassword']->getData()
                 )
             );
 
+            if (!is_null($user)) {
+                $customerInformation->setUserId($user);
+            }
+
             $entityManager->persist($user);
+            $entityManager->persist($customerInformation);
             $entityManager->flush();
 
             return $this->redirectToRoute('login');

@@ -9,13 +9,9 @@ use App\Enum\StateProductEnum;
 use App\Enum\StatusProductOfferEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Exception;
 
 class ProductOfferFixtures extends Fixture
 {
-    /**
-     * @throws Exception
-     */
     public function load(ObjectManager $manager): void
     {
         $now = new \DateTime();

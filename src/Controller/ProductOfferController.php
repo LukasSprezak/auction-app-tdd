@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class ProductOfferController extends AbstractController
 {
@@ -21,7 +22,8 @@ class ProductOfferController extends AbstractController
         $entityManager = $this->doctrine;
         $productOffers = $entityManager
             ->getRepository(ProductOffer::class)
-            ->getPublicProductOffers();
+            ->getPublicProductOffers()
+        ;
 
         return $this->render('product-offer/my.html.twig', [
             'productOffers' => $productOffers,
@@ -29,7 +31,7 @@ class ProductOfferController extends AbstractController
     }
 
     #[Route('/add-product-offer', name: 'add_product_offer', methods: ["GET|POST"] )]
-    public function addProductOffer(Request $request): Response
+    public function addProductOffer(Request $request, UserInterface $user): Response
     {
         $productOffer = new ProductOffer();
         $productOfferRepository = $this->doctrine

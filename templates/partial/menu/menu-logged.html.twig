@@ -15,6 +15,9 @@
                 <a class="nav-link {% if app.request.get('_route') == 'add_product_offer' %}active{% endif %}" href="{{ path('add_product_offer') }}">Add product</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {% if app.request.get('_route') == 'user_profile' %}active{% endif %}" href="{{ path('user_profile') }}">Account</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="{{ path('logout') }}">Logout</a>
             </li>
         </ul>

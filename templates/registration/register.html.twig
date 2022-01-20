@@ -8,10 +8,51 @@
         <div class="col-12">
         <h1 class="h3 mb-3 font-weight-normal">Register</h1>
 
-        {{ form_start(registrationForm) }}
-            {{ form_row(registrationForm.email) }}
-            {{ form_row(registrationForm.plainPassword, {label: 'Password'} ) }}
-            {{ form_row(registrationForm.agreeTerms) }}
+        {{ form_start(registrationForm, enctype='multipart/form-data', {"attr": {"novalidate": "novalidate"}} ) }}
+
+            {% if registrationForm.user.email is defined %}
+                {{ form_row(registrationForm.user.email) }}
+            {% endif %}
+
+            {% if registrationForm.user.username is defined %}
+                {{ form_row(registrationForm.user.username) }}
+            {% endif %}
+
+            {% if registrationForm.user.plainPassword is defined %}
+                {{ form_row(registrationForm.user.plainPassword ) }}
+            {% endif %}
+
+            {% if registrationForm.user.agreeTerms is defined %}
+                {{ form_row(registrationForm.user.agreeTerms) }}
+            {% endif %}
+
+            {% if registrationForm.customerInformation.firstName is defined %}
+                {{ form_row(registrationForm.customerInformation.firstName) }}
+            {% endif %}
+
+            {% if registrationForm.customerInformation.lastName is defined %}
+                {{ form_row(registrationForm.customerInformation.lastName) }}
+            {% endif %}
+
+            {% if registrationForm.customerInformation.birthday is defined %}
+                {{ form_row(registrationForm.customerInformation.birthday) }}
+            {% endif %}
+
+            {% if registrationForm.customerInformation.city is defined %}
+                {{ form_row(registrationForm.customerInformation.city) }}
+            {% endif %}
+
+            {% if registrationForm.customerInformation.address is defined %}
+                {{ form_row(registrationForm.customerInformation.address) }}
+            {% endif %}
+
+            {% if registrationForm.customerInformation.phoneNumber is defined %}
+                {{ form_row(registrationForm.customerInformation.phoneNumber) }}
+            {% endif %}
+
+            {% if registrationForm.customerInformation.zipCode is defined %}
+                {{ form_row(registrationForm.customerInformation.zipCode) }}
+            {% endif %}
 
             <button type="submit" class="btn btn-primary">
                 <i class="fa fa-save" aria-hidden="true"></i> Register

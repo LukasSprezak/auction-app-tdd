@@ -19,6 +19,9 @@ class ProductOffer
     #[ORM\Column(type: 'string', length: 8)]
     private string $id;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'productOffers')]
+    private User $owner;
+
     #[ORM\Column(type: 'string', length: 120)]
     private string $title;
 
@@ -35,10 +38,10 @@ class ProductOffer
     private DateTime $createdAt;
 
     #[ORM\Column(type: 'datetime')]
-    private null|DateTime $updateAt;
+    private DateTime|null $updateAt;
 
     #[ORM\Column(type: 'datetime')]
-    private null|DateTime $expiresAt;
+    private DateTime|null $expiresAt;
 
     #[ORM\Column(type: 'boolean')]
     private bool $enabled = false;
@@ -56,7 +59,7 @@ class ProductOffer
     private ProductBillingEnum $productBilling;
 
     #[ORM\Column(type: 'boolean')]
-    private bool $deleted;
+    private bool $deleted = false;
 
     public function __construct()
     {
@@ -70,6 +73,17 @@ class ProductOffer
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function getOwner(): User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(User $owner): static
+    {
+        $this->owner = $owner;
+        return $this;
     }
 
     public function getTitle(): string

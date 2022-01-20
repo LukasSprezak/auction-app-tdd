@@ -6,13 +6,14 @@ use App\Entity\ProductOffer;
 use App\Enum\StatusProductOfferEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
 
 class ProductOfferRepository extends ServiceEntityRepository
 {
     private const ENABLED = 1;
     private const DELETED = 0;
 
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private Security $security)
     {
         parent::__construct($registry, ProductOffer::class);
     }
@@ -22,8 +23,10 @@ class ProductOfferRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('p')
             ->where("p.enabled = :enabled")
             ->setParameter('enabled', self::ENABLED)
-            ->Andwhere('p.deleted = :deleted')
+            ->andwhere('p.deleted = :deleted')
             ->setParameter('deleted', self::DELETED)
+            ->andwhere('p.owner = :owner')
+            ->setParameter('owner', $this->security->getUser())
             ->orderBy('p.createdAt', 'DESC')
             ->getQuery()
             ->getResult()
@@ -38,6 +41,7 @@ class ProductOfferRepository extends ServiceEntityRepository
             $productOffer->setStatus(StatusProductOfferEnum::DRAFT);
         }
 
+        $productOffer->setOwner($this->security->getUser());
         $this->getEntityManager()->persist($productOffer);
         $this->getEntityManager()->flush();
     }
