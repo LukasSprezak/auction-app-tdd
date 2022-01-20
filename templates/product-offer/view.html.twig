@@ -8,6 +8,9 @@
         <h2>Title: {{ productOffer.title }}</h2>
         <p>Description: {{ productOffer.description }}</p>
         <p>Price: {{ productOffer.price }}</p>
-        <a class="btn btn-outline-primary float-left" href="{{ path('edit_product_offer', { id: productOffer.id}) }}" role="button">edit</a>
+
+        <a class="btn btn-outline-primary float-left mr-3" href="{{ path('edit_product_offer', { id: productOffer.id}) }}" role="button">edit</a>
+        <a class="btn btn-outline-danger float-left mr-3" href="{{ path('delete_product_offer', { id: productOffer.id}) }}" role="button">delete</a>
+        <button onclick="location.href='{{ path('my_product_offer') }}'" class="btn btn-outline-secondary" type="button">Back</button>
 </div>
 {% endblock %}

@@ -35,6 +35,7 @@ class ProductOfferFixtures extends Fixture
            $productOffer->setCreatedAt($now);
            $productOffer->setUpdateAt($now);
            $productOffer->setExpiresAt($now);
+           $productOffer->setDeleted(false);
            $manager->persist($productOffer);
        }
 

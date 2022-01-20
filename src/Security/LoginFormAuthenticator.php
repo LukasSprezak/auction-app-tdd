@@ -28,7 +28,6 @@ class LoginFormAuthenticator extends AbstractAuthenticator
         private RouterInterface $router,
     ) {}
 
-
     public function supports(Request $request): bool|null
     {
         return 'login' === $request->attributes->get('_route') && $request->isMethod('POST');

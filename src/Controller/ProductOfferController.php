@@ -32,7 +32,8 @@ class ProductOfferController extends AbstractController
     public function addProductOffer(Request $request): Response
     {
         $productOffer = new ProductOffer();
-        $productOfferRepository = $this->doctrine->getRepository(ProductOffer::class);
+        $productOfferRepository = $this->doctrine
+            ->getRepository(ProductOffer::class);
 
         $form = $this->createForm(ProductOfferType::class, $productOffer);
         $form->handleRequest($request);
@@ -71,7 +72,9 @@ class ProductOfferController extends AbstractController
     #[Route('/my-product-offer/edit/{id}', name: 'edit_product_offer', methods: ['GET|POST'])]
     public function editProductOffer(Request $request, ProductOffer $productOffer): Response
     {
-        $productOfferRepository = $this->doctrine->getRepository(ProductOffer::class);
+        $productOfferRepository = $this->doctrine
+            ->getRepository(ProductOffer::class);
+
         $form = $this->createForm(ProductOfferType::class, $productOffer);
 
         if ($request->isMethod("POST")) {
@@ -93,5 +96,22 @@ class ProductOfferController extends AbstractController
         return $this->render("product-offer/edit.html.twig", [
             "productOfferForm" => $form->createView()
         ]);
+    }
+
+    #[Route('/my-product-offer/delete/{id}', name: 'delete_product_offer', methods: ['GET'])]
+    public function deleteProductOffer(ProductOffer $productOffer): Response
+    {
+        $productOfferRepository = $this->doctrine
+            ->getRepository(ProductOffer::class);
+
+        try {
+            $productOfferRepository->deleteProductOffer($productOffer);
+            $this->addFlash("success", "Offer {$productOffer->getTitle()} has been delete");
+
+        } catch (\Exception $exception) {
+            $this->addFlash('error', 'Product offer deleted error');
+        }
+
+        return $this->redirectToRoute('my_product_offer');
     }
 }

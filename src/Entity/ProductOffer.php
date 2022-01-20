@@ -55,6 +55,9 @@ class ProductOffer
     #[Column(type: 'string', length: 20, enumType: ProductBillingEnum::class)]
     private ProductBillingEnum $productBilling;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $deleted;
+
     public function __construct()
     {
         $this->id = IdGenerator::IdGenerator();
@@ -198,6 +201,17 @@ class ProductOffer
     public function setProductBilling(ProductBillingEnum $productBilling): ProductOffer
     {
         $this->productBilling = $productBilling;
+        return $this;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->deleted;
+    }
+
+    public function setDeleted(bool $deleted): ProductOffer
+    {
+        $this->deleted = $deleted;
         return $this;
     }
 }

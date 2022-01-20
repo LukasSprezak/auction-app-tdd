@@ -10,6 +10,7 @@ use Doctrine\Persistence\ManagerRegistry;
 class ProductOfferRepository extends ServiceEntityRepository
 {
     private const ENABLED = 1;
+    private const DELETED = 0;
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -21,6 +22,8 @@ class ProductOfferRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('p')
             ->where("p.enabled = :enabled")
             ->setParameter('enabled', self::ENABLED)
+            ->Andwhere('p.deleted = :deleted')
+            ->setParameter('deleted', self::DELETED)
             ->orderBy('p.createdAt', 'DESC')
             ->getQuery()
             ->getResult()
@@ -35,6 +38,13 @@ class ProductOfferRepository extends ServiceEntityRepository
             $productOffer->setStatus(StatusProductOfferEnum::DRAFT);
         }
 
+        $this->getEntityManager()->persist($productOffer);
+        $this->getEntityManager()->flush();
+    }
+
+    public function deleteProductOffer(ProductOffer $productOffer): void
+    {
+        $productOffer->setDeleted(true);
         $this->getEntityManager()->persist($productOffer);
         $this->getEntityManager()->flush();
     }
