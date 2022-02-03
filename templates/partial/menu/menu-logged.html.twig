@@ -3,7 +3,7 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-        <a class="navbar-brand" href="#">Brand</a>
+        <a class="navbar-brand" href="{{ path("advertisement_index") }}">Brand</a>
         <ul class="nav nav-pills mr-auto mt-2 mt-lg-0">
             <li class="nav-item">
                 <a class="nav-link {% if app.request.get('_route') == 'advertisement_index' %}active{% endif %}" href="{{ path('advertisement_index') }}">Home</a>

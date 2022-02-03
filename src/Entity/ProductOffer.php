@@ -11,10 +11,13 @@ use DateTime;
 use App\Repository\ProductOfferRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: ProductOfferRepository::class)]
 class ProductOffer
 {
+    use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\Column(type: 'string', length: 8)]
     private string $id;
@@ -33,12 +36,6 @@ class ProductOffer
 
     #[Column(type: 'string', length: 20, enumType: StateProductEnum::class)]
     public StateProductEnum $stateOfProduct;
-
-    #[ORM\Column(type: 'datetime')]
-    private DateTime $createdAt;
-
-    #[ORM\Column(type: 'datetime')]
-    private DateTime|null $updateAt;
 
     #[ORM\Column(type: 'datetime')]
     private DateTime|null $expiresAt;
@@ -64,8 +61,6 @@ class ProductOffer
     public function __construct()
     {
         $this->id = IdGenerator::IdGenerator();
-        $this->createdAt = new DateTime();
-        $this->updateAt = new DateTime();
         $this->expiresAt = new DateTime();
 
     }
@@ -127,28 +122,6 @@ class ProductOffer
     public function setStateOfProduct(StateProductEnum $stateOfProduct): ProductOffer
     {
         $this->stateOfProduct = $stateOfProduct;
-        return $this;
-    }
-
-    public function getCreatedAt(): DateTime
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(DateTime $createdAt): ProductOffer
-    {
-        $this->createdAt = $createdAt;
-        return $this;
-    }
-
-    public function getUpdateAt(): null|DateTime
-    {
-        return $this->updateAt;
-    }
-
-    public function setUpdateAt(DateTime $updateAt): ProductOffer
-    {
-        $this->updateAt = $updateAt;
         return $this;
     }
 

@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\ProductOffer;
 use App\Enum\StatusProductOfferEnum;
 use App\Form\ProductOfferType;
+use App\Repository\ProductOfferRepository;
+use App\Service\MailerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,22 +18,20 @@ class ProductOfferController extends AbstractController
 {
     public function __construct(private ManagerRegistry $doctrine) {}
 
-    #[Route('/my-product-offer', name: 'my_product_offer', methods: ["GET"] )]
-    public function myProductOffer(): Response
+    #[Route('/my-product-offer', name: 'my_product_offer', defaults: ['page' => '1'], methods: ['GET']),
+      Route('/my-product-offer/page/{page<[1-9]\d*>}', name: 'my_product_offer_paginated', methods: ['GET']),
+    ]
+    public function myProductOffer(int $page, ProductOfferRepository $productOfferRepository): Response
     {
-        $entityManager = $this->doctrine;
-        $productOffers = $entityManager
-            ->getRepository(ProductOffer::class)
-            ->getPublicProductOffers()
-        ;
+        $allCurrentUserProductOffers = $productOfferRepository->getProductOffersPaginator($page);
 
         return $this->render('product-offer/my.html.twig', [
-            'productOffers' => $productOffers,
+            'paginator' => $allCurrentUserProductOffers,
         ]);
     }
 
-    #[Route('/add-product-offer', name: 'add_product_offer', methods: ["GET|POST"] )]
-    public function addProductOffer(Request $request, UserInterface $user): Response
+    #[Route('/add-product-offer', name: 'add_product_offer', methods: ['GET','POST'] )]
+    public function addProductOffer(Request $request, MailerService $mailerService, UserInterface $user): Response
     {
         $productOffer = new ProductOffer();
         $productOfferRepository = $this->doctrine
@@ -51,7 +51,7 @@ class ProductOfferController extends AbstractController
                 $this->addFlash('error', 'Product offer add error');
             }
         }
-
+        $mailerService->sendAddProductOffer($user);
         return $this->render('product-offer/add.html.twig', [
             'productOfferForm' => $form->createView()
         ]);
@@ -71,7 +71,7 @@ class ProductOfferController extends AbstractController
         ]);
     }
 
-    #[Route('/my-product-offer/edit/{id}', name: 'edit_product_offer', methods: ['GET|POST'])]
+    #[Route('/my-product-offer/edit/{id}', name: 'edit_product_offer', methods: ['GET','POST'])]
     public function editProductOffer(Request $request, ProductOffer $productOffer): Response
     {
         $productOfferRepository = $this->doctrine

@@ -1,11 +1,9 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Edit product{% endblock %}
-
 {% block content %}
+
     <div class="container mt-5 mb-5">
         <h1 class="h3 mb-3 mt-5 font-weight-normal text-center">Edit product offer</h1>
-        {% form_theme productOfferForm 'bootstrap_4_layout.html.twig' %}
         {{ form_start(productOfferForm, enctype='multipart/form-data', {"attr": {"novalidate": "novalidate"}} ) }}
 
         {{ form_row(productOfferForm.title) }}

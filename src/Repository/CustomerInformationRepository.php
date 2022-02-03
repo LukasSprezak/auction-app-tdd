@@ -12,4 +12,10 @@ class CustomerInformationRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, CustomerInformation::class);
     }
+
+    public function editCustomerInformation(CustomerInformation $customerInformation): void
+    {
+        $this->getEntityManager()->persist($customerInformation);
+        $this->getEntityManager()->flush();
+    }
 }

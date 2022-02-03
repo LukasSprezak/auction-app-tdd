@@ -28,4 +28,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->persist($user);
         $this->_em->flush();
     }
+
+    public function getCurrentUser(): array
+    {
+        return $this->createQueryBuilder('u')
+//            ->where('IDENTITY(p.owner) = :owner')
+            ->where('p.owner = :owner')
+            ->setParameter('owner', $this->security->getUser())
+            ->orderBy('p.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

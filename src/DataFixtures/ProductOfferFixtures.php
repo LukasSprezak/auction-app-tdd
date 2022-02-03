@@ -29,7 +29,7 @@ class ProductOfferFixtures extends Fixture
            $productOffer->setProductBilling(ProductBillingEnum::PRICE);
            $productOffer->setNegotiablePrice(true);
            $productOffer->setCreatedAt($now);
-           $productOffer->setUpdateAt($now);
+           $productOffer->setUpdatedAt($now);
            $productOffer->setExpiresAt($now);
            $productOffer->setDeleted(false);
            $manager->persist($productOffer);

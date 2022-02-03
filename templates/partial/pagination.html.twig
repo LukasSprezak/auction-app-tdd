@@ -1,0 +1,33 @@
+{% if paginator.hasToPaginate %}
+    <div class="col-md-12">
+        <nav>
+            <ul class="pagination justify-content-center">
+
+                {% if paginator.currentPage > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path("my_product_offer_paginated", {page: paginator.currentPage - 1}) }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% for i in 1..paginator.lastPage %}
+                    <li class="page-item {% if i == paginator.currentPage %}active{% endif %}">
+                        <a class="page-link" href="{{ path("my_product_offer_paginated", {page: i}) }}">{{ i }}</a>
+                    </li>
+                {% endfor %}
+
+                {% if paginator.currentPage < paginator.lastPage %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path("my_product_offer_paginated", {page: paginator.currentPage + 1}) }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+            </ul>
+        </nav>
+    </div>
+{% endif %}

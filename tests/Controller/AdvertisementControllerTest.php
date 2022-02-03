@@ -7,27 +7,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AdvertisementControllerTest extends WebTestCase
 {
-    /**
-     * @dataProvider getUrlsThatDontHavePermissions
-     * @param string $url
-     */
-    public function testHomePage(string $url): void
+    public function testIndex(): void
     {
         $client = static::createClient();
-        $client->request('GET', $url);
+        $client->request('GET', '/');
 
         $this->assertEquals( Response::HTTP_OK, $client->getResponse()->getStatusCode());
-        self::assertResponseIsSuccessful($url);
-    }
-
-
-    public function getUrlsThatDontHavePermissions(): ?\Generator
-    {
-        yield ['/'];
-    }
-
-    public function getUrlAddressesThatHavePermissions(): ?\Generator
-    {
-        yield [''];
+        self::assertSelectorTextContains('h1','Advertisement');
+        self::assertResponseIsSuccessful();
     }
 }
