@@ -32,7 +32,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function getCurrentUser(): array
     {
         return $this->createQueryBuilder('u')
-//            ->where('IDENTITY(p.owner) = :owner')
             ->where('p.owner = :owner')
             ->setParameter('owner', $this->security->getUser())
             ->orderBy('p.createdAt', 'DESC')

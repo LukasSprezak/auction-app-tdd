@@ -36,6 +36,7 @@ class ProductOfferRepository extends ServiceEntityRepository
     public function deleteProductOffer(ProductOffer $productOffer): void
     {
         $productOffer->setDeleted(true);
+
         $this->getEntityManager()->persist($productOffer);
         $this->getEntityManager()->flush();
     }

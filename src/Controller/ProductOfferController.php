@@ -30,7 +30,7 @@ class ProductOfferController extends AbstractController
         ]);
     }
 
-    #[Route('/add-product-offer', name: 'add_product_offer', methods: ['GET','POST'] )]
+    #[Route('/add-product-offer', name: 'add_product_offer', methods: ['GET|POST'] )]
     public function addProductOffer(Request $request, MailerService $mailerService, UserInterface $user): Response
     {
         $productOffer = new ProductOffer();
@@ -43,6 +43,7 @@ class ProductOfferController extends AbstractController
         if ($request->isMethod('POST') && $form->isSubmitted() && $form->isValid()) {
             try {
                 $productOfferRepository->createProductOffer($productOffer);
+                $mailerService->sendAddProductOffer($user);
 
                 $this->addFlash('success', 'Product offer add success');
                 return $this->redirectToRoute('my_product_offer');
@@ -51,7 +52,6 @@ class ProductOfferController extends AbstractController
                 $this->addFlash('error', 'Product offer add error');
             }
         }
-        $mailerService->sendAddProductOffer($user);
         return $this->render('product-offer/add.html.twig', [
             'productOfferForm' => $form->createView()
         ]);
@@ -71,7 +71,7 @@ class ProductOfferController extends AbstractController
         ]);
     }
 
-    #[Route('/my-product-offer/edit/{id}', name: 'edit_product_offer', methods: ['GET','POST'])]
+    #[Route('/my-product-offer/edit/{id}', name: 'edit_product_offer', methods: ['GET|POST'] )]
     public function editProductOffer(Request $request, ProductOffer $productOffer): Response
     {
         $productOfferRepository = $this->doctrine
@@ -100,7 +100,7 @@ class ProductOfferController extends AbstractController
         ]);
     }
 
-    #[Route('/my-product-offer/delete/{id}', name: 'delete_product_offer', methods: ['GET'])]
+    #[Route('/my-product-offer/delete/{id}', name: 'delete_product_offer', methods: ['GET'] )]
     public function deleteProductOffer(ProductOffer $productOffer): Response
     {
         $productOfferRepository = $this->doctrine
