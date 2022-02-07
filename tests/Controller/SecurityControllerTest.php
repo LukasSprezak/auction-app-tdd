@@ -13,7 +13,7 @@ class SecurityControllerTest extends WebTestCase
         $client->followRedirects();
         $client->request('GET', '/login');
         $client->submitForm('Sign in', [
-            'username' => 'admin',
+            'email' => 'admin',
             'password' => 'admin',
         ]);
 

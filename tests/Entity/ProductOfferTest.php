@@ -21,9 +21,7 @@ class ProductOfferTest extends TestCase
 
     public function productOfferDataProvider(): array
     {
-        $createdAt = new \DateTime();
-        $updateAt = new \DateTime();
-        $expiresAt = new \DateTime();
+        $now = new \DateTime();
 
         return [
             ['title', 'test'],
@@ -36,9 +34,9 @@ class ProductOfferTest extends TestCase
             ['enabled', false],
             ['status', 'status'],
             ['companyOrIndividual', 'companyOrIndividual'],
-            ['createdAt', $createdAt],
-            ['updateAt', $updateAt],
-            ['expiresAt', $expiresAt],
+            ['createdAt', $now],
+            ['updateAt', $now],
+            ['expiresAt', $now],
         ];
     }
 }
