@@ -27,10 +27,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'userId', targetEntity: CustomerInformation::class)]
     private mixed $customerInformation;
 
-    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[ORM\Column(type: 'string', length: 32, unique: true)]
     private string $email;
 
-    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[ORM\Column(type: 'string', length: 32, unique: true)]
     private string $username;
 
     #[ORM\Column(type: 'json')]

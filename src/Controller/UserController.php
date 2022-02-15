@@ -3,11 +3,16 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Form\CustomerInformationType;
+use App\Form\UserChangePasswordType;
 use App\Repository\CustomerInformationRepository;
+use App\Service\UserService;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserController extends AbstractController
 {
@@ -37,9 +42,24 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/change-password', name: 'user_change_password', methods: ['GET|POST'])]
-    public function changePassword(Request $request): Response
+    public function changePassword(Request $request, UserPasswordHasherInterface $hasher, UserInterface $user, UserService $userService): Response
     {
-        return $this->render('user/security-profile.html.twig');
+        $changePasswordForm = $this->createForm(UserChangePasswordType::class, $user);
+        $changePasswordForm->handleRequest($request);
+
+        if ($changePasswordForm->isSubmitted() && $changePasswordForm->isValid()) {
+            try {
+                $userService->changePassword($user, $hasher);
+                $this->addFlash("success", "Your password has been changed");
+
+            } catch (Exception $exception) {
+                $this->addFlash('error', $exception->getMessage());
+            }
+        }
+
+        return $this->render('user/change-password.html.twig', [
+            'changePasswordForm' => $changePasswordForm->createView(),
+        ]);
     }
 
     #[Route('/user/notifications', name: 'user_notifications', methods: ['GET|POST'])]

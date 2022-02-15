@@ -18,13 +18,19 @@ class ProductOfferControllerTest extends WebTestCase
     public function testMyProductOffer(): void
     {
         $client = static::createClient();
+
+        $userRepository = static::getContainer()->get(UserRepository::class);
+        $testUser = $userRepository->findOneByEmail(self::EMAIL_LOGIN);
+        $client->loginUser($testUser);
+
         $crawler = $client->request('GET', TestHelper::getUrl('my_product_offer'));
 
         self::assertResponseIsSuccessful();
         $this->assertEquals( Response::HTTP_OK, $client->getResponse()->getStatusCode());
+
         $this->assertCount(
             PaginationService::PAGE_SIZE,
-            $crawler->filter('div.container')
+            $crawler->filter('.mb-4')
         );
     }
 

@@ -5,10 +5,13 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -18,8 +21,31 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email')
-            ->add('username')
+            ->add('email', EmailType::class, [
+                'label' => 'Email',
+                'required' => true,
+                'constraints' => [
+                    new Email,
+                    new NotBlank(['message' => 'Please enter your email address.']),
+                    new Length([
+                        'max' => 32,
+                        'maxMessage' => 'Please enter up to 32 characters.'
+                    ])
+                ],
+            ])
+            ->add('username', TextType::class, [
+                'label' => 'Username',
+                'required' => true,
+                'constraints' => [
+                    new NotBlank(['message' => 'Please enter your username.']),
+                    new Length([
+                        'min' => 2,
+                        'minMessage' => 'Please enter at least two characters.',
+                        'max' => 32,
+                        'maxMessage' => 'Please enter up to 32 characters.'
+                    ])
+                ],
+            ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'label_attr' => [
@@ -34,8 +60,8 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
+                'required' => true,
                 'mapped' => false,
-                'error_bubbling' => true,
                 'attr' => ['autocomplete' => 'new-password'],
                 'first_options' => ['label' => 'Password'],
                 'second_options' => ['label' => 'Repeated password'],
@@ -58,6 +84,8 @@ class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+//            'cascade_validation' => true,
+//            'validation_groups' => array('Default', 'Registration')
         ]);
     }
 }
