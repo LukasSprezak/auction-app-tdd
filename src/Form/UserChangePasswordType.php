@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class UserChangePasswordType extends AbstractType
+final class UserChangePasswordType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -50,12 +50,6 @@ class UserChangePasswordType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-//            'validation_groups' => array('Default', 'ChangePassword')
         ]);
-    }
-
-    public function getName(): string
-    {
-        return 'changePassword';
     }
 }

@@ -9,13 +9,14 @@ use App\Enum\CompanyOrIndividualEnum;
 use App\Enum\ProductBillingEnum;
 use App\Enum\StateProductEnum;
 use App\Enum\StatusProductOfferEnum;
+use App\Service\UserService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
-    public function __construct(private UserPasswordHasherInterface $passwordHasher) {}
+    public function __construct(private UserPasswordHasherInterface $passwordHasher, UserService $userService) {}
 
     public function load(ObjectManager $manager): void
     {
@@ -28,6 +29,9 @@ class AppFixtures extends Fixture
             ->setUsername("user")
             ->setRoles(['ROLE_USER'])
             ->setPassword($this->passwordHasher->hashPassword($user, 'admin'))
+            ->setToken('PWk5iKHGnq7dCqOcIE0FfyX7h08bu9Fu')
+            ->setEnabled(true)
+            ->setExpiresEnabled($now)
         ;
         $manager->persist($userRole);
 
@@ -36,6 +40,9 @@ class AppFixtures extends Fixture
             ->setUsername("admin")
             ->setRoles(['ROLE_ADMIN'])
             ->setPassword($this->passwordHasher->hashPassword($user, 'admin'))
+            ->setToken('PWk5iKHGnq7dCq7h08bu9FOcIE0FfyXu')
+            ->setEnabled(true)
+            ->setExpiresEnabled($now)
         ;
         $manager->persist($adminRole);
 

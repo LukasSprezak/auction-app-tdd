@@ -22,6 +22,10 @@
                 {{ form_row(registrationForm.user.plainPassword ) }}
             {% endif %}
 
+            {% if registrationForm.user.logo is defined %}
+                {{ form_row(registrationForm.user.logo) }}
+            {% endif %}
+
             {% if registrationForm.user.agreeTerms is defined %}
                 {{ form_row(registrationForm.user.agreeTerms) }}
             {% endif %}
@@ -53,7 +57,7 @@
             {% if registrationForm.customerInformation.zipCode is defined %}
                 {{ form_row(registrationForm.customerInformation.zipCode) }}
             {% endif %}
-
+            
             <button type="submit" class="btn btn-primary">
                 <i class="fa fa-save" aria-hidden="true"></i> Register
             </button>

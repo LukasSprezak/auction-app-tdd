@@ -1,5 +1,6 @@
 <nav class="nav nav-borders">
     <a class="nav-link {% if app.request.get('_route') == 'user_profile' %}active ms-0{% endif %}" href="{{ path("user_profile") }}">Profile</a>
     <a class="nav-link {% if app.request.get('_route') == 'user_change_password' %}active ms-0{% endif %}" href="{{ path("user_change_password") }}">Change password</a>
+    <a class="nav-link {% if app.request.get('_route') == 'user_remember_password' %}active ms-0{% endif %}" href="{{ path("user_remember_password") }}">Remember Password</a>
     <a class="nav-link {% if app.request.get('_route') == 'user_notifications' %}active ms-0{% endif %}" href="{{ path("user_notifications") }}">Notifications</a>
 </nav>

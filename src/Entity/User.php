@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -40,6 +41,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $password;
 
     private string|null $plainPassword;
+
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    private string $logo;
+
+    #[ORM\Column(type: 'string', length: 32, nullable: true)]
+    private string|null $token;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $enabled = false;
+
+    #[ORM\Column(type: 'datetime')]
+    private DateTime|null $expiresEnabled;
 
     public function __construct()
     {
@@ -179,5 +192,49 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
          $this->plainPassword = null;
+    }
+
+    public function getLogo(): string
+    {
+        return $this->logo;
+    }
+
+    public function setLogo($logo): static
+    {
+        $this->logo = $logo;
+        return $this;
+    }
+
+    public function getToken(): string
+    {
+        return $this->token;
+    }
+
+    public function setToken($token): User
+    {
+        $this->token = $token;
+        return $this;
+    }
+
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(bool $enabled): User
+    {
+        $this->enabled = $enabled;
+        return $this;
+    }
+
+    public function getExpiresEnabled(): null|DateTime
+    {
+        return $this->expiresEnabled;
+    }
+
+    public function setExpiresEnabled(DateTime $expiresEnabled): User
+    {
+        $this->expiresEnabled = $expiresEnabled;
+        return $this;
     }
 }
