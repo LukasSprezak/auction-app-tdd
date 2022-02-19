@@ -15,7 +15,7 @@
     {{ form_row(productOfferForm.negotiablePrice) }}
     {{ form_row(productOfferForm.enabled) }}
 
-    <button type="submit" class="btn btn-primary">
+    <button type="submit" class="btn btn-primary disableSubmit">
         <i class="fa fa-save" aria-hidden="true"></i> Add product
     </button>
     <button onclick="location.href='{{ path('my_product_offer') }}'" class="btn btn-outline-secondary" type="button">Back</button>

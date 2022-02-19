@@ -13,5 +13,13 @@ $(function() {
         $("input").removeAttr('disabled');
         $("<button type='submit' class='btn btn-primary'><i class='fa fa-save' aria-hidden='true'></i> Save profile</button>").appendTo("form:last");
     });
+
+    $('.disableSubmit').click(function () {
+        setTimeout(function () { clickButton(); }, 0);
+    });
+
+    function clickButton() {
+        $('.disableSubmit').prop('disabled', true);
+    }
 });
 </script>
