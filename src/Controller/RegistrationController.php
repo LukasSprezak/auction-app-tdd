@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\CustomerInformation;
 use App\Entity\User;
 use App\Form\UserCustomerInformationType;
-use App\Repository\UserRepository;
 use App\Service\MailerService;
 use App\Service\UserService;
 use Exception;

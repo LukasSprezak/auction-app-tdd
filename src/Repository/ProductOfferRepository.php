@@ -56,4 +56,18 @@ class ProductOfferRepository extends ServiceEntityRepository
         return (new PaginationService($queryBuilder))
             ->pagination($page);
     }
+
+    public function getAllProductOffersPaginator(int $page = self::PAGE): PaginationService
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+            ->where("p.enabled = :enabled")
+            ->setParameter('enabled', self::ENABLED)
+            ->andwhere('p.deleted = :deleted')
+            ->setParameter('deleted', self::DELETED)
+            ->orderBy('p.createdAt', 'DESC')
+        ;
+
+        return (new PaginationService($queryBuilder))
+            ->pagination($page);
+    }
 }

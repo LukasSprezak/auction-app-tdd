@@ -14,7 +14,6 @@ use Symfony\Component\Routing\RouterInterface;
 
 class UserService
 {
-    private const PASSWORD_LENGTH = 6;
     private const TOKEN_LENGTH = 32;
     private const ALPHABET = 'abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789';
 
@@ -30,7 +29,7 @@ class UserService
     public function changePassword(User $user, UserPasswordHasherInterface $hasher): bool
     {
         if (null === $user->getPlainPassword()){
-            throw new \RuntimeException('No new password has been set');
+            throw new \RuntimeException('No new password has been set.');
         }
 
         $password = $hasher->hashPassword($user, $user->getPlainPassword());
