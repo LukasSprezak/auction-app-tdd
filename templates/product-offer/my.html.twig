@@ -3,35 +3,64 @@
 {% block content %}
 <div class="container mt-5 mb-5">
     <div class="row">
-        <div class="card-deck">
-            <div class="row row-cols-1 row-cols-md-3">
-                {% if paginator.results|length > 0 %}
-                {% for productOffer in paginator.results %}
-                <div class="mb-4">
-                    <div class="card shadow bg-white rounded">
-                        <img src="http://placehold.it/750x300" class="card-img-top" alt="">
-                        <div class="card-body">
-                            <h5 class="card-title">Title: {{ productOffer.title }}</h5>
-                            <p class="card-text">Description: {{ productOffer.description }}</p>
-                            <p class="card-text">Price: {{ productOffer.price }}</p>
-                        </div>
-                        <div class="card-footer">
-                            <a class="btn btn-outline-primary float-left" href="{{ path('view_product_offer', { id: productOffer.id}) }}" role="button">visit</a>
-                            <small class="text-muted pl-5 mt-5">created at {{ productOffer.createdAt |format_datetime('medium', 'short') }} </small>
-                        </div>
-                    </div>
+        <div class="col-12 col-sm-12 col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>My product offers</h4>
                 </div>
-                {% else %}
+                <div class="card-body">
+                    {% if paginator.results|length > 0 %}
+                    <div class="table-responsive" tabindex="2" style="height: 400px; overflow: hidden; outline: none;">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th class="pl-3">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="allSelectCheckbox">
+                                        <label class="custom-control-label" for="allSelectCheckbox">&nbsp;</label>
+                                    </div>
+                                </th>
+                                <th>Id</th>
+                                <th>Title</th>
+                                <th>Price</th>
+                                <th>Enabled</th>
+                                <th>Status</th>
+                                <th>Edit</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {% for productOffer in paginator.results %}
+                            <tr>
+                                <td class="pl-3">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="{{ productOffer.id }}">
+                                        <label class="custom-control-label" for="{{ productOffer.id }}">&nbsp;</label>
+                                    </div>
+                                </td>
+                                <td>{{ productOffer.id }}</td>
+                                <td>{{ productOffer.title }}</td>
+                                <td>{{ productOffer.price }}</td>
+                                <td>{{ productOffer.enabled }}</td>
+                                <td>{{ productOffer.status|json_encode|trim('"') }}</td>
+                                <td>
+                                    <a data-toggle="tooltip" title="" data-original-title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                    <a data-toggle="tooltip" title="" data-original-title="Delete"><i class="far fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                            {% else %}
+                                <div class="p-3 mb-2 bg-light text-black text-center">
+                                    <h1>You don't have any products offers.</h1>
+                                </div>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% include('partial/pagination.html.twig') %}
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
-    <div class="p-3 mb-2 bg-light text-black text-center">
-        <h1>You don't have any products offers.</h1>
-    </div>
-    {% endfor %}
-
-    {% include('partial/pagination.html.twig') %}
-
-    {% endif %}
 </div>
 {% endblock %}

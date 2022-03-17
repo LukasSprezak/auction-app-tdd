@@ -6,8 +6,8 @@ use App\Entity\CustomerInformation;
 use App\Entity\User;
 use App\Form\UserCustomerInformationType;
 use App\Service\MailerService;
+use App\Service\UploadService;
 use App\Service\UserService;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
+use Exception;
 
 class RegistrationController extends AbstractController
 {
@@ -25,7 +26,7 @@ class RegistrationController extends AbstractController
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
         UserService $userService,
-        MailerService $mailerService): Response
+        MailerService $mailerService, UploadService $uploadService): Response
     {
         $user = new User();
         $customerInformation = new CustomerInformation();
@@ -46,7 +47,9 @@ class RegistrationController extends AbstractController
                         $form->get('user')['plainPassword']->getData()
                     )
                 );
-                $userService->createRegisterUser($user, $customerInformation, $mailerService);
+                $file = $form->get('user')['logo']->getData();
+
+                $userService->createRegisterUser($user, $customerInformation, $mailerService, $uploadService, $file);
                 $this->addFlash("success", "We have sent confirmation of account activation to your email.");
                 return $this->redirectToRoute('login');
 

@@ -43,7 +43,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string|null $plainPassword;
 
     #[ORM\Column(type: 'string', length: 100, nullable: true)]
-    private string $logo;
+    private string|null $logo;
 
     #[ORM\Column(type: 'string', length: 32, nullable: true)]
     private string|null $token;
@@ -194,7 +194,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
          $this->plainPassword = null;
     }
 
-    public function getLogo(): string
+    public function getLogo(): string|null
     {
         return $this->logo;
     }

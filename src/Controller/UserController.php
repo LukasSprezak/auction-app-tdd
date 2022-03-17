@@ -6,11 +6,11 @@ use App\Form\CustomerInformationType;
 use App\Form\UserChangePasswordType;
 use App\Form\UserRememberPasswordType;
 use App\Repository\CustomerInformationRepository;
+use App\Repository\UserRepository;
 use App\Service\UserService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,14 +19,16 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Exception;
 
+#[isGranted('ROLE_USER')]
 #[Route('/user')]
 class UserController extends AbstractController
 {
     #[Route('/profile', name: 'user_profile', methods: ['GET|POST'])]
-    public function userProfile(Request $request, CustomerInformationRepository $customerInformation): Response
+    public function userProfile(Request $request, CustomerInformationRepository $customerInformation, UserRepository $userRepository): Response
     {
         $user = $this->getUser();
         $currentUserAccount = $customerInformation->findOneBy(['userId' => $user]);
+        $userLogo = $userRepository->find($user);
 
         $form = $this->createForm(CustomerInformationType::class, $currentUserAccount);
 
@@ -44,6 +46,7 @@ class UserController extends AbstractController
 
         return $this->render('user/user-profile.html.twig', [
             'customerInformationForm' => $form->createView(),
+            'userLogo' => $userLogo
         ]);
     }
 
@@ -108,32 +111,5 @@ class UserController extends AbstractController
     public function notifications(Request $request): Response
     {
         return $this->render('user/notifications.html.twig');
-    }
-
-    #[Route('/upload-logo', name: 'user_upload_logo', methods: ['GET|POST'])]
-    public function uploadLogo(Request $request): JsonResponse
-    {
-        $logo = $request->files->get('logo');
-        $status = [
-            'status' => 'success',
-            'logoUpload' => false
-        ];
-
-        try {
-            if (!is_null($logo)) {
-                $filename = uniqid('', true) . "." . $logo->getClientOriginalExtension();
-                $logo->move(
-                    $this->getParameter('upload_logo'),
-                    $filename
-                );
-
-                $status = [
-                    'status' => 'success',
-                    'logoUpload' => true
-                ];
-            }
-        } catch (FileException $exception) {}
-
-        return new JsonResponse($status);
     }
 }

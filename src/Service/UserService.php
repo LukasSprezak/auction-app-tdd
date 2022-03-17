@@ -7,6 +7,7 @@ use App\Entity\User;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Twig\Environment;
@@ -62,7 +63,7 @@ class UserService
     public function createRegisterUser(
         User $user,
         CustomerInformation $customerInformation,
-        MailerService $mailerService): bool
+        MailerService $mailerService, UploadService $uploadService, UploadedFile $file): bool
     {
         $now = new DateTime;
 
@@ -73,6 +74,9 @@ class UserService
         $user->setToken($this->getGenerateRandomToken(self::TOKEN_LENGTH));
         $user->setEnabled(false);
         $user->setExpiresEnabled($now);
+
+        $uploadService->upload($file, $user);
+
         $this->entityManager->persist($user);
         $this->entityManager->persist($customerInformation);
         $this->entityManager->flush();

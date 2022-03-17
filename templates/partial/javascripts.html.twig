@@ -26,5 +26,24 @@ $(function() {
     function clickButton() {
         disableSubmit.prop('disabled', true);
     }
+
+    /**
+     * All checked checkboxes.
+     */
+    let allSelectCheckbox = $('#allSelectCheckbox');
+    allSelectCheckbox.on("click", function () {
+        $('input:checkbox').not(this).prop('checked', this.checked);
+    });
+
+    /**
+     * Visible name input file.
+     */
+    let customFileInput = $('.custom-file-input');
+    customFileInput.on('change', function(event) {
+        const inputFile = event.currentTarget;
+        $(inputFile).parent()
+            .find('.custom-file-label')
+            .html(inputFile.files[0].name);
+    });
 });
 </script>

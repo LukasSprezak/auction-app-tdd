@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\Security;
 class ProductOfferRepository extends ServiceEntityRepository
 {
     private const ENABLED = 1;
-    private const DELETED = 0;
+    private const NOT_DELETED = 0;
     private const PAGE = 1;
 
     public function __construct(ManagerRegistry $registry, private Security $security)
@@ -47,7 +47,7 @@ class ProductOfferRepository extends ServiceEntityRepository
             ->where("p.enabled = :enabled")
             ->setParameter('enabled', self::ENABLED)
             ->andwhere('p.deleted = :deleted')
-            ->setParameter('deleted', self::DELETED)
+            ->setParameter('deleted', self::NOT_DELETED)
             ->andwhere('p.owner = :owner')
             ->setParameter('owner', $this->security->getUser())
             ->orderBy('p.createdAt', 'DESC')
@@ -63,7 +63,7 @@ class ProductOfferRepository extends ServiceEntityRepository
             ->where("p.enabled = :enabled")
             ->setParameter('enabled', self::ENABLED)
             ->andwhere('p.deleted = :deleted')
-            ->setParameter('deleted', self::DELETED)
+            ->setParameter('deleted', self::NOT_DELETED)
             ->orderBy('p.createdAt', 'DESC')
         ;
 
